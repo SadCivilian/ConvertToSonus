@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#00E5FF">
+    <meta name="language" content="English">
+    <meta http-equiv="Content-Language" content="eng">
+    <meta property="og:image" content="images/converttosonus.jpeg">
+    <meta property="og:description"
+        content="ConvertToSonus, converts temperature and wind speed data into sound for the NASA Space Apps Challenge.">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+    <title>ConvertToSonus - Team Obombo!</title>
+    <link rel="icon" type="image/png" href="/static/images/converttosonus.jpeg">
+
+    <link href="https://fonts.cdnfonts.com/css/neo-tech" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Init CSS (also init bootstrap's css right above this) -->
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="navbar__container">
+            <a class="navbar__brand" href="#">
+                <img src="static/images/logo.jpeg" alt="Logo">
+                <span>ConvertToSonus</span>
+            </a>
+            <button type="button" class="navbar__toggle" id="navbarToggle" aria-label="Toggle navigation"
+                aria-controls="navbarMenu" aria-expanded="false">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </button>
+            <nav id="navbarMenu" class="navbar__menu">
+                <ul class="navbar__list">
+                    <li class="navbar__item"><a href="aboutus.html" class="navbar__link" style="color: #00deff;">About Us</a></li>
+                    <li class="navbar__item"><a href="#contact" class="navbar__link" style="color: #00deff;">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Filtering Menu (also the buttons I guess) -->
+    <div id="filter_main" class="position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-4 z-1 d-flex gap-2">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Filter
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a id="temp_btn" class="dropdown-item active" href="#">Temperature</a></li>
+                    <li><a id="windspeed_btn" class="dropdown-item" href="#">Wind Speed</a></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Viewing Modes
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a id="canvas_mode" class="dropdown-item" href="#">Canvas Mode</a></li>
+                    <li><a id="video_mode" class="dropdown-item active" href="#">Video Mode</a></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Audio Modes
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a id="click_tap_btn" class="dropdown-item active" href="#">Click/Tap</a></li>
+                    <li><a id="hover_btn" class="dropdown-item disabled" href="#">Hover</a></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Noise Parameters
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a id="volume_btn" class="dropdown-item active" href="#">Volume</a></li>
+                    <li><a id="pitch_btn" class="dropdown-item" href="#">Pitch</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <video class="map-video" id="mapVideo" muted loop playsinline controls>
+            <source src="static/videos/MC01_stage3_GMAO_near_surface_temperature_2048x1024_en.mp4" type="video/mp4">
+        </video>
+
+        <input id="volume_slider" type="range" min="0" max="100" value="20"
+            class="position-absolute mt-5 me-4 top-0 end-0 slider">
+
+        <div class="map-info">
+            <p>- made by team <span style="color: #00deff;">Obombo!</span></p>
+        </div>
+    </div>
+    <hr>
+    <section class="section-container">
+        <h2>Project</h2>
+        <strong><p>
+           ConvertToSonus is a video-to-sonification project that transforms scientific visualizations into sound. By analyzing pixel-level information and color variations in NASA's scientific visualization videos, our engine translates visual patterns into auditory representations.
+        </p>
+        <p>
+            Using the CIELAB color space and audio mapping techniques, ConvertToSonus connects visual characteristics with sound parameters such as pitch and intensity. This allows changes in scientific visualizations to be experienced through sound rather than sight alone.
+        </p>
+        <p>
+            Our project explores a different dimension of scientific communication, creating an alternative way to interact with environmental information and making scientific visualizations more accessible to different audiences.
+        </p>
+        <p>
+           Because we believe science should be experienced in more than one way for everyone. That's why ConvertToSonus is more than just a website.
+        </p>
+        <p>
+             We make you hear what you can not see.
+        </p>
+        </strong>
+    </section>
+
+    <hr>
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+
+            <h2>Contact Us</h2>
+            <p>Want to report an inconsistency, learn more about the project, or simply have a question? Contact us.</p>
+
+            <form id="contactForm">
+
+                <input type="hidden" name="_subject" value="New Contact Message!">
+
+                <input type="text" name="name" placeholder="Your Name" required>
+
+                <input type="email" name="email" placeholder="Your Email" required>
+
+                <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+
+                <button type="submit">Send Message</button>
+
+                <p id="formStatus"></p>
+
+            </form>
+        </div>
+    </section>
+
+
+    <!-- Start bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Start the WASM and main JS loop, init event handler -->
+    <script type="module" src="js/index.js"></script>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/generic_touch_event.js"></script>
+</body>
+
+</html>

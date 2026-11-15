@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Sora:wght@100..800&display=swap');
+
+:root {
+    /* primary colors and backdrops for if stuff goes wrong maybe wuh js can take care of it probably */
+    --color-background: #121212;
+    --color-surface: #1e1e1e;
+    --color-focus: #1e1e1eb7;
+    --color-text-primary: #e0e0e0;
+    --color-text-secondary: #a0a0a0;
+    --color-border: #333333;
+    --color-primary: #00deff;
+    --color-primary-hover: #00deff;
+
+    --transition-speed: 0.3s;
+    --navbar-height: 70px;
+    --navbar-padding: 24px;
+    --container-width: 1140px;
+    --border-radius: 8px;
+    --font-family-sans-serif: system-ui, -apple-system, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family-sans-serif);
+    font-size: 1rem;
+    line-height: 1.6;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.content {
+    height: 200vh;
+    padding: 100px var(--navbar-padding);
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+}
+
+a:hover {
+    color: var(--color-primary-hover);
+}
+
+/*Navbar Styles*/
+.navbar {
+    height: var(--navbar-height);
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+    z-index: 1000;
+    letter-spacing: 1px;
+    font-family: 'Anton', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.navbar__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--navbar-padding);
+}
+
+.navbar__brand img {
+    width: 60px;
+    height: 60px;
+    padding-bottom: 5px;
+    object-fit: contain;
+}
+
+.navbar__brand {
+    display: flex;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar__toggle {
+    display: block;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.navbar__toggle .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: var(--color-text-primary);
+    transition: all var(--transition-speed) ease;
+}
+
+.navbar__toggle.is-active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.navbar__toggle.is-active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.navbar__toggle.is-active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* translate when the toggle is active */
+.navbar__menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: var(--navbar-height);
+    left: 0;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 999;
+}
+
+.navbar__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    list-style: none;
+    padding: 0;
+}
+
+.navbar__menu.is-active {
+    display: flex;
+}
+
+.navbar__item {
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+}
+
+.navbar__link {
+    display: block;
+    padding: 20px;
+    font-weight: bold;
+}
+
+:is(.navbar__toggle, .navbar__link, #theme-toggle):focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+
+/* Desktop navbar styles when too thin? experimental shit here */
+@media (min-width: 780px) {
+
+    .navbar__toggle {
+        display: none;
+    }
+
+    .navbar__container {
+        max-width: 1140px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .navbar__brand {
+        margin-right: 0;
+    }
+
+    .navbar__menu {
+        display: flex;
+        position: static;
+        width: auto;
+        margin-left: auto;
+        flex-direction: row;
+        background: transparent;
+        border: none;
+    }
+
+    .navbar__list {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 25px;
+    }
+
+    .navbar__item {
+        border: none;
+    }
+
+    .navbar__link {
+        padding: 8px;
+    }
+}
+
+/* Data Styles */
+.map {
+    width: 100%;
+    overflow: hidden;
+}
+
+.map img {
+    width: 100%;
+    height: auto;
+    display: block;
+    padding-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .map img {
+        height: 240px;
+    }
+}
+
+.map-video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.map-info {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+.map-info p {
+    font-family: 'Libre Caslon Text', serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.button_drop_style {
+    background-color: var(--color-focus);
+    color: white;
+    border: 0.2px solid var(--color-border);
+    font-family: 'Anton', sans-serif;
+}
+
+.dropdown-toggle {
+    background-color: var(--color-focus);
+    color: white;
+    border: 0.2px solid var(--color-border);
+    font-family: 'Anton', sans-serif;
+}
+
+.dropdown-toggle:hover {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+/* Element odaklanıldığında */
+.dropdown-toggle:focus {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+/* Tıklama anında */
+.dropdown-item:active {
+    background-color: var(--color-text-primary);
+    color: var(--color-background);
+}
+
+/* Project Styles */
+.section-container {
+    padding: 24px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.section-container h2,
+.section-container h1,
+.contact-section h2 {
+    font-family: 'Anton', sans-serif;
+    text-align: center;
+    margin-bottom: 16px;
+    color: #00deff;
+}
+
+.section-container li {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 25px;
+}
+
+.section-container h3,
+.section-container h4 {
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.section-container p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+}
+
+.contact-section {
+    padding: 40px 20px;
+    background-color: #121212;
+    color: #e0e0e0;
+    text-align: center;
+    scroll-margin-top: 100px;
+}
+
+.contact-container {
+    max-width: 600px;
+    margin: auto;
+}
+
+.contact-container h2 {
+    color: #00deff;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.contact-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.contact-container input,
+
+.contact-container textarea {
+    padding: 15px;
+    background-color: #1e1e1e;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: white;
+    font-family: inherit;
+    outline: none;
+}
+
+.contact-container input:focus,
+
+.contact-container textarea:focus {
+    border-color: #00deff;
+}
+
+.contact-container button {
+    padding: 14px;
+    background-color: #00deff;
+    color: #121212;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.contact-container button:hover {
+    opacity: 0.8;
+}
+
+.visioncard,
+.missioncard {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.ach_all {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 40px;
+
+}
+
+.ach_all img {
+    width: 100%;
+    border-radius: 8px;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card {
+    padding: 10px;
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+    margin-left: 15px;
+}
+
+.card h5 {
+    color: white;
+    margin-top: 18px;
+}
