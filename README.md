@@ -31,9 +31,6 @@ make test
 # Otherwise if you want to build the binary, run:
 make build
 
-# To uninstall (delete the project directory), run:
-make uninstall
-
 # You can then navigate to 127.0.0.1:8080/index.html to get started. If you chose to build the binary, running it will serve the web server and you can keep it running.
 
 ```
