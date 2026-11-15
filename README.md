@@ -18,7 +18,7 @@ ConvertToSonus is a demo showcasing an engine to transform visual data from NASA
 - Zeynep Su Dabak
 
 ## Building
-Requires [tsc](https://www.typescriptlang.org/) (and the derivatives required, like npm!) [Rust](https://rust-lang.org/), [Cargo](https://doc.rust-lang.org/cargo/), and [wasm-pack](https://wasm-bindgen.github.io/wasm-pack/) to be installed on your system. If you have all of these and want to build from source, run the following:
+Requires [make](https://gnuwin32.sourceforge.net/packages/make.htm) (this comes built-in on basically every linux system, but windows users might have to install manually), [tsc](https://www.typescriptlang.org/) (and the derivatives required, like npm! Also, make sure it's installed globally) [Rust](https://rust-lang.org/), [Cargo](https://doc.rust-lang.org/cargo/), and [wasm-pack](https://wasm-bindgen.github.io/wasm-pack/) (make sure this is also installed globally, cargo provides an install command for this) to be installed on your system. If you have all of these and want to build from source, run the following:
 
 ```bash
 
