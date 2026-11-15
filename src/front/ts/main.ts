@@ -81,9 +81,22 @@ async function get_worklet_info() : Promise<pctx_out> {
         worklet_port = caller.port
         worklet_ctx = new_ctx
         worklet_node = caller
+        worklet_gain = amp
         return {"gain" : amp, "node": caller, "port" : caller.port, "ctx" : new_ctx}
     }
     return {"gain" : worklet_gain, "node": worklet_node, "port" : worklet_port, "ctx" : worklet_ctx}
+}
+
+async function kill_hover_audio(): Promise<void> {
+    let obj = await get_worklet_info();
+    let now = obj.ctx.currentTime
+    obj.gain.gain.linearRampToValueAtTime(0, now)
+}
+
+async function restore_hover_audio_to_gain() : Promise<void> {
+    let obj = await get_worklet_info()
+    let now = obj.ctx.currentTime
+    obj.gain.gain.linearRampToValueAtTime(get_current_audio_gain(), now)
 }
 
 let legends = await prep_sonification_legend_objects()
@@ -113,6 +126,14 @@ const video = doc_child("mapVideo")! as HTMLVideoElement
 const volume_slider = doc_child("volume_slider")! as HTMLInputElement
 const mapVideoSource = video.querySelector("source")! as HTMLSourceElement
 
+/**
+ * Returns the gain from the volume slider.
+ * @returns The gain.
+ */
+function get_current_audio_gain() : number {
+    return (parseInt(volume_slider.value) / 100)
+}
+
 // The next 2 functions are merely for DRY, they don't affect the amount of function protos generated (they purely feed extra arguments via closure)
 
 /**
@@ -127,9 +148,8 @@ function canvas_move_with_port_wire(canvas : HTMLCanvasElement, port : MessagePo
         let t_pixel: Uint8ClampedArray = pixel_on_canvas(canvas, x, y)
         let result = sonify_pixel(t_pixel, legends[as_legend])
         let numeric = result.values[0]!
-        // port.postMessage({ "strength": numeric });
         const now = (worklet_ctx as AudioContext).currentTime;
-        (worklet_node as AudioWorkletNode).parameters.get("strength")?.exponentialRampToValueAtTime(numeric, now + 0.05)
+        (worklet_node as AudioWorkletNode).parameters.get("strength")?.linearRampToValueAtTime(numeric, now + 0.05)
     })
 }
 
@@ -148,19 +168,18 @@ function canvas_interact_wire(canvas : HTMLCanvasElement, param : NoiseParameter
         let result = sonify_pixel(t_pixel, legends[as_legend])
         let numeric = result.values[0]!
         device.numeric_into_buffer(numeric, 1)
-        device.set_pitch(2000.0)
         device.set_playback(true)  
     })
 }
 
 wire_on_interact(video_mode_button, async () => {
     if (AppState.current_audio_mode == "hover") {
-        let obj = await get_worklet_info()
-        
+        await kill_hover_audio()
         recreate_canvas(video)
         unrecog_css_hack(click_tap_btn, "active", true)
         AppState.current_audio_mode = "pixel"
     }
+    unrecog_css_hack(hover_btn, "active", false)
     unrecog_css_hack(hover_btn, "disabled", true)
     unrecog_css_hack(video_mode_button, "active", true)
     unrecog_css_hack(canvas_mode_button, "active", false)
@@ -192,10 +211,7 @@ wire_on_interact(click_tap_btn, async () => {
     // HACK: Stinky, stinky hack. Recreate the canvas to avoid having to disconnect an anonymous event listener (this is faster than implementing caching on these pieces of shit)
     if (AppState.current_audio_mode == "hover") { // The above only applies on canvas view of course.
         let new_canvas = recreate_canvas(video)
-        let obj = await get_worklet_info()
-        let now = obj.ctx.currentTime
-        obj.node.parameters.get("strength")?.exponentialRampToValueAtTime(0, now)
-        await obj.ctx.suspend()
+        await kill_hover_audio()
         AppState.current_audio_mode = "pixel"
         canvas_interact_wire(new_canvas, AppState.current_noise_parameter)
     }
@@ -208,7 +224,7 @@ wire_on_interact(hover_btn, async () => {
         let new_canvas = recreate_canvas(video) 
         let obj = await get_worklet_info()
         let port = obj.port
-        await obj.ctx.resume()
+        restore_hover_audio_to_gain()
         AppState.current_audio_mode = "hover"
         canvas_move_with_port_wire(new_canvas, port, AppState.current_noise_parameter)
     }
@@ -264,7 +280,7 @@ wire_on_interact(temp_btn, () => {
     AppState.current_active_video = "temp"
 })
 
-
+/*
 wire_on_interact(noise_param_btn, async () => {
     let new_canvas = recreate_canvas(video) as HTMLCanvasElement
 
@@ -296,6 +312,7 @@ wire_on_interact(pitch_param_btn, async () => {
     }
     AppState.current_noise_parameter = NoiseParameter.PITCH
 })
+*/
 
 async function on_mouse_move(evt : MouseEvent) : Promise<void> {
     let new_gain = parseInt(volume_slider.value) / 100
@@ -314,5 +331,3 @@ volume_slider.addEventListener("mouseup", () => {
     volume_slider.removeEventListener("mousemove", on_mouse_move)
 })
 
-
-// TODO: make audioworklet actually sound hearable, make pixel coupling work

@@ -99,17 +99,13 @@ export function switch_to_playback_mode(video) {
  *
  * Recreates a canvas by destroying it and cloning it. This is for disconnecting the anonymous event listeners on the canvas. // HACK: can be done more efficiently, don't give a shit
  * @param video The video to operate on.
- * @param clbk The callback to execute once the new canvas has been created.
  * @returns The new canvas element.
  */
-export function recreate_canvas(video, clbk) {
+export function recreate_canvas(video) {
     let to_delete = doc_child("CanvasModeCanvas"); // this is always the child that we're looking for
     if (to_delete != null) {
         to_delete.remove();
     }
     let canvas = switch_to_canvas_mode(video);
-    video.addEventListener("loadeddata", async () => {
-        clbk(canvas);
-    }, { "once": true });
     return canvas;
 }

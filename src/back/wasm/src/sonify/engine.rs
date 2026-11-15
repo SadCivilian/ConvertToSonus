@@ -186,7 +186,6 @@ pub fn sonify_pixel(bytes : Uint8ClampedArray, legend : &SonificationLegend) -> 
     let sat : f32 = if max_v == 0.0 || min_v == 0.0 { 0.0 } else { ((max_v - min_v) / max_v) as f32};
 
     if sat <= 0.10 {
-        console_log(&"fuck it's zero sat".into());
         return Ok(SonificationResultJSON { is_pixel: false, values: vec![0.0] })
     }
 
